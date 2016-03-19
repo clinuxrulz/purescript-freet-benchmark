@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500"><defs><style type="text/css">
+.background {
+  fill: white;
+}
+
+text {
+  font-size: 14px;
+  font-family: sans-serif;
+}
+
+.axis-path,
+.axis-line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.data-series-0 {
+  stroke: steelblue;
+  fill: steelblue;
+}
+
+.data-series-1 {
+  stroke: crimson;
+  fill: crimson;
+}
+
+.data-series-2 {
+  stroke: mediumseagreen;
+  fill: mediumseagreen;
+}
+
+.data-series-3 {
+  stroke: mediumslateblue;
+  fill: mediumslateblue;
+}
+
+.data-series-4 {
+  stroke: goldenrod;
+  fill: goldenrod;
+}
+
+.error-bar {
+  fill: none;
+}
+</style></defs><rect width="960" height="500" class="background"/><g transform="translate(80,40)"><g transform="translate(420, 0)"><text style="text-anchor: middle; font-size: 28px;">Left associated binds (1 input per size)</text></g><g class="x axis" transform="translate(0,400)"><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">100,000</text></g><g class="tick" transform="translate(70,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">150,000</text></g><g class="tick" transform="translate(140,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">200,000</text></g><g class="tick" transform="translate(210,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">250,000</text></g><g class="tick" transform="translate(280,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">300,000</text></g><g class="tick" transform="translate(350,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">350,000</text></g><g class="tick" transform="translate(420,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">400,000</text></g><g class="tick" transform="translate(490.00000000000006,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">450,000</text></g><g class="tick" transform="translate(560,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">500,000</text></g><g class="tick" transform="translate(630,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">550,000</text></g><g class="tick" transform="translate(700,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">600,000</text></g><g class="tick" transform="translate(770,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">650,000</text></g><g class="tick" transform="translate(840,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">700,000</text></g><path class="axis-path" d="M0,6V0H840V6"/><text x="420" y="40" style="text-anchor: middle;">Number of binds</text></g><g class="y axis"><g class="tick" transform="translate(0,363.6680333479077)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">1.00</text></g><g class="tick" transform="translate(0,312.686242199814)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">2.00</text></g><g class="tick" transform="translate(0,261.70445105172035)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">3.00</text></g><g class="tick" transform="translate(0,210.72265990362666)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">4.00</text></g><g class="tick" transform="translate(0,159.74086875553297)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">5.00</text></g><g class="tick" transform="translate(0,108.75907760743932)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">6.00</text></g><g class="tick" transform="translate(0,57.77728645934563)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">7.00</text></g><g class="tick" transform="translate(0,6.795495311251987)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">8.00</text></g><path class="axis-path" d="M-6,0H0V400H-6"/><text transform="rotate(-90)" y="6" dy=".71em" style="text-anchor: end;">Mean running time (seconds)</text></g><g class="data-series-0"><circle cx="0" cy="377.5975435963946" r="3"/><circle cx="140" cy="327.9115035831099" r="3"/><circle cx="280" cy="272.4451764310817" r="3"/><circle cx="420" cy="246.450912223705" r="3"/><circle cx="560" cy="172.00103791073232" r="3"/><circle cx="700" cy="87.9995113818702" r="3"/><circle cx="840" cy="0" r="3"/><path class="error-bar" x="0" y="377.5975435963946" d="M 0 377.5975435963946 V 371.79728909098924 h -3 h 6 h -3 V 383.3977981018 h -3 h 6"/><path class="error-bar" x="140" y="327.9115035831099" d="M 140 327.9115035831099 V 323.118998982191 h -3 h 6 h -3 V 332.7040081840288 h -3 h 6"/><path class="error-bar" x="280" y="272.4451764310817" d="M 280 272.4451764310817 V 268.023461190151 h -3 h 6 h -3 V 276.8668916720123 h -3 h 6"/><path class="error-bar" x="420" y="246.450912223705" d="M 420 246.450912223705 V 230.02318544436181 h -3 h 6 h -3 V 262.87863900304814 h -3 h 6"/><path class="error-bar" x="560" y="172.00103791073232" d="M 560 172.00103791073232 V 136.117067620318 h -3 h 6 h -3 V 207.8850082011466 h -3 h 6"/><path class="error-bar" x="700" y="87.9995113818702" d="M 700 87.9995113818702 V 53.363731168599 h -3 h 6 h -3 V 122.63529159514147 h -3 h 6"/><path class="error-bar" x="840" y="0" d="M 840 0 V -35.86831101753489 h -3 h 6 h -3 V 35.86831101753498 h -3 h 6"/><path class="line" d="M0,377.5975435963946L140,327.9115035831099L280,272.4451764310817L420,246.450912223705L560,172.00103791073232L700,87.9995113818702L840,0"/></g><g class="data-series-1"><circle cx="0" cy="400" r="3"/><circle cx="140" cy="380.86071774311074" r="3"/><circle cx="280" cy="362.64162027510577" r="3"/><circle cx="420" cy="355.8011324003988" r="3"/><circle cx="560" cy="331.0749066109612" r="3"/><circle cx="700" cy="302.2672925859871" r="3"/><circle cx="840" cy="280.03949951054653" r="3"/><path class="error-bar" x="0" y="400" d="M 0 400 V 397.83846084266753 h -3 h 6 h -3 V 402.16153915733247 h -3 h 6"/><path class="error-bar" x="140" y="380.86071774311074" d="M 140 380.86071774311074 V 374.56272640513976 h -3 h 6 h -3 V 387.15870908108184 h -3 h 6"/><path class="error-bar" x="280" y="362.64162027510577" d="M 280 362.64162027510577 V 350.3779033792424 h -3 h 6 h -3 V 374.9053371709691 h -3 h 6"/><path class="error-bar" x="420" y="355.8011324003988" d="M 420 355.8011324003988 V 352.52074445072907 h -3 h 6 h -3 V 359.0815203500685 h -3 h 6"/><path class="error-bar" x="560" y="331.0749066109612" d="M 560 331.0749066109612 V 310.3827667109046 h -3 h 6 h -3 V 351.76704651101784 h -3 h 6"/><path class="error-bar" x="700" y="302.2672925859871" d="M 700 302.2672925859871 V 290.5610193993044 h -3 h 6 h -3 V 313.9735657726698 h -3 h 6"/><path class="error-bar" x="840" y="280.03949951054653" d="M 840 280.03949951054653 V 266.06337453460844 h -3 h 6 h -3 V 294.0156244864847 h -3 h 6"/><path class="line" d="M0,400L140,380.86071774311074L280,362.64162027510577L420,355.8011324003988L560,331.0749066109612L700,302.2672925859871L840,280.03949951054653"/></g><g class="legend" transform="translate(50, 50)"><rect x="0" y="0" width="15" height="15" class="data-series-0"/><rect x="0" y="20" width="15" height="15" class="data-series-1"/><text x="24" y="13">Original FreeT</text><text x="24" y="33">Codensity FreeT</text></g></g></svg>

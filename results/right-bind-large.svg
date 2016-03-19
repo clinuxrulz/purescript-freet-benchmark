@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="500"><defs><style type="text/css">
+.background {
+  fill: white;
+}
+
+text {
+  font-size: 14px;
+  font-family: sans-serif;
+}
+
+.axis-path,
+.axis-line {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+
+.line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.data-series-0 {
+  stroke: steelblue;
+  fill: steelblue;
+}
+
+.data-series-1 {
+  stroke: crimson;
+  fill: crimson;
+}
+
+.data-series-2 {
+  stroke: mediumseagreen;
+  fill: mediumseagreen;
+}
+
+.data-series-3 {
+  stroke: mediumslateblue;
+  fill: mediumslateblue;
+}
+
+.data-series-4 {
+  stroke: goldenrod;
+  fill: goldenrod;
+}
+
+.error-bar {
+  fill: none;
+}
+</style></defs><rect width="960" height="500" class="background"/><g transform="translate(80,40)"><g transform="translate(420, 0)"><text style="text-anchor: middle; font-size: 28px;">Right associated binds (1 input per size)</text></g><g class="x axis" transform="translate(0,400)"><g class="tick" transform="translate(0,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">100,000</text></g><g class="tick" transform="translate(70,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">150,000</text></g><g class="tick" transform="translate(140,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">200,000</text></g><g class="tick" transform="translate(210,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">250,000</text></g><g class="tick" transform="translate(280,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">300,000</text></g><g class="tick" transform="translate(350,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">350,000</text></g><g class="tick" transform="translate(420,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">400,000</text></g><g class="tick" transform="translate(490.00000000000006,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">450,000</text></g><g class="tick" transform="translate(560,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">500,000</text></g><g class="tick" transform="translate(630,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">550,000</text></g><g class="tick" transform="translate(700,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">600,000</text></g><g class="tick" transform="translate(770,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">650,000</text></g><g class="tick" transform="translate(840,0)" style="opacity: 1;"><line y2="6" x2="0" class="axis-line"/><text dy=".71em" y="9" x="0" style="text-anchor: middle;">700,000</text></g><path class="axis-path" d="M0,6V0H840V6"/><text x="420" y="40" style="text-anchor: middle;">Number of binds</text></g><g class="y axis"><g class="tick" transform="translate(0,376.00945602685437)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">0.40</text></g><g class="tick" transform="translate(0,346.90653724152185)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">0.60</text></g><g class="tick" transform="translate(0,317.80361845618927)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">0.80</text></g><g class="tick" transform="translate(0,288.7006996708567)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">1.00</text></g><g class="tick" transform="translate(0,259.5977808855241)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">1.20</text></g><g class="tick" transform="translate(0,230.4948621001916)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">1.40</text></g><g class="tick" transform="translate(0,201.391943314859)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">1.60</text></g><g class="tick" transform="translate(0,172.28902452952644)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">1.80</text></g><g class="tick" transform="translate(0,143.18610574419387)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">2.00</text></g><g class="tick" transform="translate(0,114.0831869588613)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">2.20</text></g><g class="tick" transform="translate(0,84.98026817352877)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">2.40</text></g><g class="tick" transform="translate(0,55.877349388196194)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">2.60</text></g><g class="tick" transform="translate(0,26.774430602863664)" style="opacity: 1;"><line x2="-6" y2="0" class="axis-line"/><text dy=".32em" x="-9" y="0" style="text-anchor: end;">2.80</text></g><path class="axis-path" d="M-6,0H0V400H-6"/><text transform="rotate(-90)" y="6" dy=".71em" style="text-anchor: end;">Mean running time (seconds)</text></g><g class="data-series-0"><circle cx="0" cy="384.77393126109473" r="3"/><circle cx="140" cy="334.8100256419667" r="3"/><circle cx="280" cy="271.17446106085316" r="3"/><circle cx="420" cy="236.36510009317288" r="3"/><circle cx="560" cy="171.18469582011602" r="3"/><circle cx="700" cy="63.57781166499219" r="3"/><circle cx="840" cy="0" r="3"/><path class="error-bar" x="0" y="384.77393126109473" d="M 0 384.77393126109473 V 376.8326367216542 h -3 h 6 h -3 V 392.71522580053534 h -3 h 6"/><path class="error-bar" x="140" y="334.8100256419667" d="M 140 334.8100256419667 V 317.5645403591046 h -3 h 6 h -3 V 352.0555109248288 h -3 h 6"/><path class="error-bar" x="280" y="271.17446106085316" d="M 280 271.17446106085316 V 230.7189835000842 h -3 h 6 h -3 V 311.62993862162216 h -3 h 6"/><path class="error-bar" x="420" y="236.36510009317288" d="M 420 236.36510009317288 V 220.28178498958619 h -3 h 6 h -3 V 252.4484151967596 h -3 h 6"/><path class="error-bar" x="560" y="171.18469582011602" d="M 560 171.18469582011602 V 137.25509466705165 h -3 h 6 h -3 V 205.11429697318033 h -3 h 6"/><path class="error-bar" x="700" y="63.57781166499219" d="M 700 63.57781166499219 V 39.824235181271604 h -3 h 6 h -3 V 87.33138814871278 h -3 h 6"/><path class="error-bar" x="840" y="0" d="M 840 0 V -71.6767219550941 h -3 h 6 h -3 V 71.6767219550941 h -3 h 6"/><path class="line" d="M0,384.77393126109473L140,334.8100256419667L280,271.17446106085316L420,236.36510009317288L560,171.18469582011602L700,63.57781166499219L840,0"/></g><g class="data-series-1"><circle cx="0" cy="400" r="3"/><circle cx="140" cy="355.87301733142624" r="3"/><circle cx="280" cy="321.9558577494164" r="3"/><circle cx="420" cy="286.026540560228" r="3"/><circle cx="560" cy="199.87487992152683" r="3"/><circle cx="700" cy="215.6683389201214" r="3"/><circle cx="840" cy="132.35864570178205" r="3"/><path class="error-bar" x="0" y="400" d="M 0 400 V 394.3632469356813 h -3 h 6 h -3 V 405.6367530643188 h -3 h 6"/><path class="error-bar" x="140" y="355.87301733142624" d="M 140 355.87301733142624 V 346.1380905785465 h -3 h 6 h -3 V 365.60794408430604 h -3 h 6"/><path class="error-bar" x="280" y="321.9558577494164" d="M 280 321.9558577494164 V 305.6228778793386 h -3 h 6 h -3 V 338.28883761949413 h -3 h 6"/><path class="error-bar" x="420" y="286.026540560228" d="M 420 286.026540560228 V 266.5822712962375 h -3 h 6 h -3 V 305.47080982421846 h -3 h 6"/><path class="error-bar" x="560" y="199.87487992152683" d="M 560 199.87487992152683 V 165.53683680770808 h -3 h 6 h -3 V 234.21292303534554 h -3 h 6"/><path class="error-bar" x="700" y="215.6683389201214" d="M 700 215.6683389201214 V 193.3807976066638 h -3 h 6 h -3 V 237.95588023357902 h -3 h 6"/><path class="error-bar" x="840" y="132.35864570178205" d="M 840 132.35864570178205 V 90.54024203844921 h -3 h 6 h -3 V 174.1770493651149 h -3 h 6"/><path class="line" d="M0,400L140,355.87301733142624L280,321.9558577494164L420,286.026540560228L560,199.87487992152683L700,215.6683389201214L840,132.35864570178205"/></g><g class="legend" transform="translate(50, 50)"><rect x="0" y="0" width="15" height="15" class="data-series-0"/><rect x="0" y="20" width="15" height="15" class="data-series-1"/><text x="24" y="13">Original FreeT</text><text x="24" y="33">Codensity FreeT</text></g></g></svg>
