@@ -19,7 +19,7 @@ leftBindLargeBenchmark :: Benchmark
 leftBindLargeBenchmark = mkBenchmark
   { slug: "left-bind-large"
   , title: "Left associated binds (" ++ show inputsPerSize ++ " input per size)"
-  , sizes: [1, 2, 3, 4, 5, 6, 7] <#> (* 100000)
+  , sizes: [1, 2, 3, 4, 5, 6, 7] <#> (* 10000)
   , sizeInterpretation: "Number of binds"
   , inputsPerSize: inputsPerSize
   , gen: \n -> vectorOf n (pure 0.0)
@@ -47,7 +47,7 @@ rightBindLargeBenchmark :: Benchmark
 rightBindLargeBenchmark = mkBenchmark
   { slug: "right-bind-large"
   , title: "Right associated binds (" ++ show inputsPerSize ++ " input per size)"
-  , sizes: [1, 2, 3, 4, 5, 6, 7] <#> (* 100000)
+  , sizes: [1, 2, 3, 4, 5, 6, 7] <#> (* 10000)
   , sizeInterpretation: "Number of binds"
   , inputsPerSize: inputsPerSize
   , gen: \n -> vectorOf n (pure 0.0)
