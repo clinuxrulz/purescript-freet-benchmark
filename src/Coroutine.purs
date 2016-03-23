@@ -17,7 +17,7 @@ module Main.Coroutine
 
 import Prelude
 
-import Main.CodensityBasedFreeTd7c6b83
+import Main.CodensityBasedFreeT
 
 import Data.Maybe
 import Data.Tuple

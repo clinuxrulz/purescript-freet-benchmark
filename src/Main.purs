@@ -1,7 +1,7 @@
 module Main where
 
 import Main.OriginalFreeTe0a15ee as Orig
-import Main.CodensityBasedFreeTd7c6b83 as Cod
+import Main.CodensityBasedFreeT as Cod
 
 import Prelude
 import Data.Array
