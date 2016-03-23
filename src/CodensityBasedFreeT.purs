@@ -19,23 +19,23 @@ import Data.Either (Either(..), either)
 
 import Control.Monad.Rec.Class (MonadRec, tailRecM)
 import Control.Monad.Trans (MonadTrans, lift)
+import Unsafe.Coerce
 
 -- | The free monad transformer for the functor `f`.
 newtype FreeT f m a = FreeT (
   forall r. {
     pureFreeT :: a -> r,
-    bindFreeT :: forall b. FreeT f m b -> (b -> FreeT f m a) -> r,
-    liftMFreeT :: m a -> r,
+    liftMFreeT :: m (FreeT f m a) -> r,
     liftFFreeT :: f (FreeT f m a) -> r,
     suspendFreeT :: (Unit -> FreeT f m a) -> r
   }
   -> r
 )
 
-mapFreeT_ :: forall f m a b. (a -> b) -> FreeT f m a -> FreeT f m b
+mapFreeT_ :: forall f m a b. (Functor f, Functor m) => (a -> b) -> FreeT f m a -> FreeT f m b
 mapFreeT_ f m = m >>= (pure <<< f)
 
-applyFreeT_ :: forall f m a b. FreeT f m (a -> b) -> FreeT f m a -> FreeT f m b
+applyFreeT_ :: forall f m a b. (Functor f, Functor m) => FreeT f m (a -> b) -> FreeT f m a -> FreeT f m b
 applyFreeT_ mf ma = do
   f <- mf
   f <$> ma
@@ -46,24 +46,33 @@ suspend thunk = FreeT (\{ suspendFreeT } -> suspendFreeT thunk)
 liftF :: forall f m a. f (FreeT f m a) -> FreeT f m a
 liftF f = FreeT (\{ liftFFreeT } -> liftFFreeT f)
 
-instance functorFreeT :: Functor (FreeT f m) where
+liftM :: forall f m a. m (FreeT f m a) -> FreeT f m a
+liftM m = FreeT (\{ liftMFreeT } -> liftMFreeT m)
+
+instance functorFreeT :: (Functor f, Functor m) => Functor (FreeT f m) where
   map = mapFreeT_
 
-instance applyFreeT :: Apply (FreeT f m) where
+instance applyFreeT :: (Functor f, Functor m) => Apply (FreeT f m) where
   apply mf ma = applyFreeT_ mf ma
 
-instance applicativeFreeT :: Applicative (FreeT f m) where
+instance applicativeFreeT :: (Functor f, Functor m) => Applicative (FreeT f m) where
   pure a = FreeT (\{ pureFreeT } -> pureFreeT a)
 
-instance bindFreeT :: Bind (FreeT f m) where
-  bind m f = FreeT (\{ bindFreeT } -> bindFreeT m f)
+instance bindFreeT :: (Functor f, Functor m) => Bind (FreeT f m) where
+  bind (FreeT m) f =
+    m {
+      pureFreeT: (\a -> suspend (\_ -> f a)),
+      liftMFreeT: (\m2 -> liftM $ ((_ >>= f) <$> m2)),
+      liftFFreeT: (\f2 -> liftF ((_ >>= f) <$> f2)),
+      suspendFreeT: (\thunk -> (thunk unit) >>= f)
+    }
 
-instance monadFreeT :: Monad (FreeT f m)
+instance monadFreeT :: (Functor f, Functor m) => Monad (FreeT f m)
 
-instance monadTransFreeT :: MonadTrans (FreeT f) where
-  lift m = FreeT (\{ liftMFreeT } -> liftMFreeT m)
+instance monadTransFreeT :: (Functor f) => MonadTrans (FreeT f) where
+  lift m = FreeT (\{ liftMFreeT } -> liftMFreeT (pure <$> m))
 
-instance monadRecFreeT :: MonadRec (FreeT f m) where
+instance monadRecFreeT :: (Functor f, Functor m) => MonadRec (FreeT f m) where
   tailRecM go a = suspend (\_ ->
     (go a) >>= (
       either
@@ -83,28 +92,13 @@ freeT thunk =
 
 resumeStep :: forall f m a. (Functor f, Monad m) => {
   pureFreeT :: a -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
-  bindFreeT :: forall b. FreeT f m b -> (b -> FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
-  liftMFreeT :: m a -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
+  liftMFreeT :: m (FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
   liftFFreeT :: f (FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
   suspendFreeT :: (Unit -> FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a))))
 }
 resumeStep = {
   pureFreeT: (\a -> return $ Right $ Left a),
-  bindFreeT: (\(FreeT m1) f1 ->
-    m1 {
-      pureFreeT: (\a -> return $ Left $ f1 a),
-      bindFreeT: (\m2 f2 ->
-        return $ Left $ m2 >>= (\a -> (f2 a) >>= f1)
-      ),
-      liftMFreeT: (\m2 -> do
-        a <- m2
-        return $ Left $ f1 a
-      ),
-      liftFFreeT: (\f -> return $ Left $ liftF $ (\x -> x >>= f1) <$> f),
-      suspendFreeT: (\thunk -> return $ Left $ (thunk unit) >>= f1)
-    }
-  ),
-  liftMFreeT: (\m -> (Right <<< Left) <$> m),
+  liftMFreeT: (\m -> Left <$> m),
   liftFFreeT: (\f -> (pure <<< Right <<< Right) f),
   suspendFreeT: (\thunk -> return $ Left $ thunk unit)
 }
@@ -114,8 +108,7 @@ resume = tailRecM (go resumeStep)
   where
     go :: {
             pureFreeT :: a -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
-            bindFreeT :: forall b. FreeT f m b -> (b -> FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
-            liftMFreeT :: m a -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
+            liftMFreeT :: m (FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
             liftFFreeT :: f (FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a)))),
             suspendFreeT :: (Unit -> FreeT f m a) -> m (Either (FreeT f m a) (Either a (f (FreeT f m a))))
           }
