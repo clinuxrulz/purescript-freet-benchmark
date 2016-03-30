@@ -25,7 +25,7 @@ import Unsafe.Coerce
 newtype FreeT f m a = FreeT (
   forall r. {
     done :: a -> r,
-    liftM :: m (FreeT f m a) -> r,
+    liftM :: m a -> r,
     liftF :: f (FreeT f m a) -> r,
     bind :: forall b. FreeT f m b -> (b -> FreeT f m a) -> r
   }
@@ -35,7 +35,7 @@ newtype FreeT f m a = FreeT (
 done_ :: forall f m a. a -> FreeT f m a
 done_ a = FreeT (\{ done: x } -> x a)
 
-liftM_ :: forall f m a. m (FreeT f m a) -> FreeT f m a
+liftM_ :: forall f m a. m a -> FreeT f m a
 liftM_ m = FreeT (\{ liftM: x } -> x m)
 
 liftF_ :: forall f m a. f (FreeT f m a) -> FreeT f m a
@@ -50,12 +50,7 @@ bind_ (FreeT m) f = m {
 }
 
 instance functorFreeT :: Functor (FreeT f m) where
-  map f (FreeT m) = m {
-    done: (\a -> done_ $ f a),
-    liftM: (\m2 -> bind_ (liftM_ m2) (done_ <<< f)),
-    liftF: (\f2 -> bind_ (liftF_ f2) (done_ <<< f)),
-    bind: (\m2 f2 -> bind_ m2 (\a -> bind_ (f2 a) (done_ <<< f)))
-  }
+  map f ma = bind_ ma (done_ <<< f)
 
 instance applyFreeT :: Apply (FreeT f m) where
   apply mf ma = bind_ mf (\f -> bind_ ma (done_ <<< f))
@@ -69,7 +64,7 @@ instance bindFreeT :: Bind (FreeT f m) where
 instance monadFreeT :: Monad (FreeT f m)
 
 instance monadTransFreeT :: MonadTrans (FreeT f) where
-  lift = liftM_ <<< (map pure)
+  lift = liftM_
 
 instance monadRecFreeT :: MonadRec (FreeT f m) where
   tailRecM go a =
@@ -98,7 +93,7 @@ resume = tailRecM go
     go :: FreeT f m a -> m (Either (FreeT f m a) (Either a (f (FreeT f m a))))
     go (FreeT m) = m {
       done: pure <<< Right <<< Left,
-      liftM: (Left <$> _),
+      liftM: ((Right <<< Left) <$> _),
       liftF: pure <<< Right <<< Right,
       bind: (\m2 f ->
         (resume m2) >>= (
