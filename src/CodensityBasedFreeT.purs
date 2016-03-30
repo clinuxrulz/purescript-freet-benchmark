@@ -67,24 +67,21 @@ instance monadTransFreeT :: MonadTrans (FreeT f) where
   lift = liftM_
 
 instance monadRecFreeT :: MonadRec (FreeT f m) where
-  tailRecM go a =
-    let again = tailRecM go
-    in
-    (go a) >>= (
-      either
-        again
-        pure
-    )
+  tailRecM go = go2
+    where
+      go2 a = (go a) >>= (
+        either
+          go2
+          pure
+      )
 
 -- | Construct a computation of type `FreeT`.
 freeT :: forall f m a. (Functor f, Monad m) => (Unit -> m (Either a (f (FreeT f m a)))) -> FreeT f m a
 freeT thunk =
-  (pure unit) >>= (\_ ->
-    (lift $ thunk unit) >>= (
-      either
-        pure
-        ((\x -> bind_ x id) <<< liftF_)
-    )
+  (lift $ thunk unit) >>= (
+    either
+      pure
+      ((\x -> bind_ x id) <<< liftF_)
   )
 
 resume :: forall f m a. (Functor f, MonadRec m) => FreeT f m a -> m (Either a (f (FreeT f m a)))
@@ -95,13 +92,12 @@ resume = tailRecM go
       done: pure <<< Right <<< Left,
       liftM: ((Right <<< Left) <$> _),
       liftF: pure <<< Right <<< Right <<< (pure <$> _),
-      bind: (\m2 f ->
-        (resume m2) >>= (
-          either
-            (pure <<< Left <<< f)
-            (pure <<< Left <<< (\x -> bind_ (bind_ (liftF_ x) id) f))
-        )
-      )
+      bind: (\(FreeT m2) f -> m2 {
+        done: pure <<< Left <<< f,
+        liftM: ((Left <<< f) <$> _),
+        liftF: pure <<< Right <<< Right <<< (f <$> _),
+        bind: (\m3 f2 -> pure $ Left $ (bind_ m3 (\a -> bind_ (f2 a) f)))
+      })
     }
 
 -- | Lift an action from the functor `f` to a `FreeT` action.
@@ -123,13 +119,18 @@ bimapFreeT fg mn (FreeT c) = FreeT (\k -> suspTBind (bimapSuspT fg mn (c done)) 
 -}
 
 -- | Run a `FreeT` computation to completion.
-runFreeT :: forall f m a. (Functor f, MonadRec m) => (f (FreeT f m a) -> m (FreeT f m a)) -> FreeT f m a -> m a
+runFreeT :: forall f m a. (Functor f, MonadRec m) => (forall b. f b -> m b) -> FreeT f m a -> m a
 runFreeT f = tailRecM go
   where
     go :: FreeT f m a -> m (Either (FreeT f m a) a)
-    go free =
-      (resume free) >>= (
-        either
-          (pure <<< Right)
-          ((Left <$> _) <<< f)
-      )
+    go (FreeT m) = m {
+      done: pure <<< Right,
+      liftM: (Right <$> _),
+      liftF: (Left <$> _) <<< f <<< (pure <$> _),
+      bind: (\(FreeT m2) f2 -> m2 {
+        done: pure <<< Left <<< f2,
+        liftM: ((Left <<< f2) <$> _),
+        liftF: ((Left <<< f2) <$> _) <<< f,
+        bind: (\m3 f3 -> pure $ Left $ (bind_ m3 (\a -> bind_ (f3 a) f2)))
+      })
+    }
