@@ -19,7 +19,6 @@ import Data.Either (Either(..), either)
 
 import Control.Monad.Rec.Class (MonadRec, tailRecM)
 import Control.Monad.Trans (MonadTrans, lift)
-import Unsafe.Coerce
 
 -- | The free monad transformer for the functor `f`.
 newtype FreeT f m a = FreeT (
@@ -128,7 +127,7 @@ bimapFreeT fg mn (FreeT c) = FreeT (\k -> suspTBind (bimapSuspT fg mn (c done)) 
 -}
 
 -- | Run a `FreeT` computation to completion.
-runFreeT :: forall f m a. (Functor f, MonadRec m) => (forall b. f b -> m b) -> FreeT f m a -> m a
+runFreeT :: forall f m a. (Functor f, MonadRec m) => (f (FreeT f m a) -> m (FreeT f m a)) -> FreeT f m a -> m a
 runFreeT f = tailRecM go
   where
     go :: FreeT f m a -> m (Either (FreeT f m a) a)
@@ -140,7 +139,13 @@ runFreeT f = tailRecM go
       bind: (\(FreeT m2) f2 -> m2 {
         done: pure <<< Left <<< f2,
         liftM: ((Left <<< f2) <$> _),
-        liftF: ((Left <<< f2) <$> _) <<< f,
+        liftF: (\f3 ->
+          (resume (liftF_ f3)) >>= (
+            either
+              (pure <<< Left <<< f2)
+              ((Left <$> _) <<< f <<< ((_ >>= f2) <$> _))
+          )
+        ),
         suspend: (\thunk -> pure $ Left $ bind_ (thunk unit) f2),
         bind: (\m3 f3 -> pure $ Left $ (bind_ m3 (\a -> bind_ (f3 a) f2)))
       })
