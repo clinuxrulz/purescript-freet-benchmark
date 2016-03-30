@@ -27,6 +27,7 @@ newtype FreeT f m a = FreeT (
     done :: a -> r,
     liftM :: m a -> r,
     liftF :: f a -> r,
+    suspend :: (Unit -> FreeT f m a) -> r,
     bind :: forall b. FreeT f m b -> (b -> FreeT f m a) -> r
   }
   -> r
@@ -41,11 +42,15 @@ liftM_ m = FreeT (\{ liftM: x } -> x m)
 liftF_ :: forall f m a. f a -> FreeT f m a
 liftF_ f = FreeT (\{ liftF: x } -> x f)
 
+suspend_ :: forall f m a. (Unit -> FreeT f m a) -> FreeT f m a
+suspend_ thunk = FreeT (\{ suspend: x } -> x thunk)
+
 bind_ :: forall f m a b. FreeT f m a -> (a -> FreeT f m b) -> FreeT f m b
 bind_ (FreeT m) f = m {
   done: (\a -> f a),
-  liftM: (\m2 -> bind_ (liftM_ m2) f),
-  liftF: (\f2 -> bind_ (liftF_ f2) f),
+  liftM: (\m2 -> FreeT (\{ bind: x } -> x (liftM_ m2) f)),
+  liftF: (\f2 -> FreeT (\{ bind: x } -> x (liftF_ f2) f)),
+  suspend: (\thunk -> suspend_ (\_ -> bind (thunk unit) f)),
   bind: (\m2 f2 -> bind_ m2 (\a -> bind_ (f2 a) f))
 }
 
@@ -78,10 +83,12 @@ instance monadRecFreeT :: MonadRec (FreeT f m) where
 -- | Construct a computation of type `FreeT`.
 freeT :: forall f m a. (Functor f, Monad m) => (Unit -> m (Either a (f (FreeT f m a)))) -> FreeT f m a
 freeT thunk =
-  (lift $ thunk unit) >>= (
-    either
-      pure
-      ((\x -> bind_ x id) <<< liftF_)
+  suspend_ (\_ ->
+    (lift $ thunk unit) >>= (
+      either
+        pure
+        ((\x -> bind_ x id) <<< liftF_)
+    )
   )
 
 resume :: forall f m a. (Functor f, MonadRec m) => FreeT f m a -> m (Either a (f (FreeT f m a)))
@@ -92,10 +99,12 @@ resume = tailRecM go
       done: pure <<< Right <<< Left,
       liftM: ((Right <<< Left) <$> _),
       liftF: pure <<< Right <<< Right <<< (pure <$> _),
+      suspend: (\thunk -> pure $ Left $ thunk unit),
       bind: (\(FreeT m2) f -> m2 {
         done: pure <<< Left <<< f,
         liftM: ((Left <<< f) <$> _),
         liftF: pure <<< Right <<< Right <<< (f <$> _),
+        suspend: (\thunk -> pure $ Left $ bind_ (thunk unit) f),
         bind: (\m3 f2 -> pure $ Left $ (bind_ m3 (\a -> bind_ (f2 a) f)))
       })
     }
@@ -127,10 +136,12 @@ runFreeT f = tailRecM go
       done: pure <<< Right,
       liftM: (Right <$> _),
       liftF: (Left <$> _) <<< f <<< (pure <$> _),
+      suspend: (\thunk -> pure $ Left $ thunk unit),
       bind: (\(FreeT m2) f2 -> m2 {
         done: pure <<< Left <<< f2,
         liftM: ((Left <<< f2) <$> _),
         liftF: ((Left <<< f2) <$> _) <<< f,
+        suspend: (\thunk -> pure $ Left $ bind_ (thunk unit) f2),
         bind: (\m3 f3 -> pure $ Left $ (bind_ m3 (\a -> bind_ (f3 a) f2)))
       })
     }
