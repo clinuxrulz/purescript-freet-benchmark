@@ -26,7 +26,7 @@ newtype FreeT f m a = FreeT (
   forall r. {
     done :: a -> r,
     liftM :: m a -> r,
-    liftF :: f (FreeT f m a) -> r,
+    liftF :: f a -> r,
     bind :: forall b. FreeT f m b -> (b -> FreeT f m a) -> r
   }
   -> r
@@ -38,7 +38,7 @@ done_ a = FreeT (\{ done: x } -> x a)
 liftM_ :: forall f m a. m a -> FreeT f m a
 liftM_ m = FreeT (\{ liftM: x } -> x m)
 
-liftF_ :: forall f m a. f (FreeT f m a) -> FreeT f m a
+liftF_ :: forall f m a. f a -> FreeT f m a
 liftF_ f = FreeT (\{ liftF: x } -> x f)
 
 bind_ :: forall f m a b. FreeT f m a -> (a -> FreeT f m b) -> FreeT f m b
@@ -83,7 +83,7 @@ freeT thunk =
     (lift $ thunk unit) >>= (
       either
         pure
-        liftF_
+        ((\x -> bind_ x id) <<< liftF_)
     )
   )
 
@@ -94,19 +94,19 @@ resume = tailRecM go
     go (FreeT m) = m {
       done: pure <<< Right <<< Left,
       liftM: ((Right <<< Left) <$> _),
-      liftF: pure <<< Right <<< Right,
+      liftF: pure <<< Right <<< Right <<< (pure <$> _),
       bind: (\m2 f ->
         (resume m2) >>= (
           either
             (pure <<< Left <<< f)
-            (pure <<< Left <<< (\x -> bind_ (liftF_ x) f))
+            (pure <<< Left <<< (\x -> bind_ (bind_ (liftF_ x) id) f))
         )
       )
     }
 
 -- | Lift an action from the functor `f` to a `FreeT` action.
-liftFreeT :: forall f m a. (Functor f, Monad m) => f a -> FreeT f m a
-liftFreeT = liftF_ <<< (pure <$> _)
+liftFreeT :: forall f m a. f a -> FreeT f m a
+liftFreeT = liftF_
 
 {-
 -- | Change the underlying `Monad` for a `FreeT` action.
