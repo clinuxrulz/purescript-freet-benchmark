@@ -2,6 +2,7 @@ module Main where
 
 import Main.OriginalFreeTe0a15ee as Orig
 import Main.CodensityBasedFreeT as Cod
+import Main.DataFreeT as Data
 
 import Prelude
 import Data.Array
@@ -24,7 +25,8 @@ leftBindLargeBenchmark = mkBenchmark
   , inputsPerSize: inputsPerSize
   , gen: \n -> vectorOf n (pure 0.0)
   , functions: [ benchFn "Original FreeT" (runIdentity <<< (Orig.runFreeT id) <<< origBinds)
-               , benchFn "Codensity FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
+               , benchFn "Rec CPS FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
+               , benchFn "Data CPS FreeT" (runIdentity <<< (Data.runFreeT id) <<< dataBinds)
                ]
   }
   where
@@ -43,6 +45,12 @@ leftBindLargeBenchmark = mkBenchmark
   codGen :: forall a. a -> Cod.FreeT Identity Identity a
   codGen = pure
 
+  dataBinds :: Array Number -> Data.FreeT Identity Identity Number
+  dataBinds as = foldl (\b a -> b >>= const (dataGen a)) (dataGen 0.0) as
+
+  dataGen :: forall a. a -> Data.FreeT Identity Identity a
+  dataGen = pure
+
 rightBindLargeBenchmark :: Benchmark
 rightBindLargeBenchmark = mkBenchmark
   { slug: "right-bind-large"
@@ -52,7 +60,8 @@ rightBindLargeBenchmark = mkBenchmark
   , inputsPerSize: inputsPerSize
   , gen: \n -> vectorOf n (pure 0.0)
   , functions: [ benchFn "Original FreeT" (runIdentity <<< (Orig.runFreeT id) <<< origBinds)
-               , benchFn "Codensity FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
+               , benchFn "Rec CPS FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
+               , benchFn "Data CPS FreeT" (runIdentity <<< (Data.runFreeT id) <<< dataBinds)
                ]
   }
   where
@@ -70,6 +79,12 @@ rightBindLargeBenchmark = mkBenchmark
 
   codGen :: forall a. a -> Cod.FreeT Identity Identity a
   codGen = pure
+
+  dataBinds :: Array Number -> Data.FreeT Identity Identity Number
+  dataBinds as = foldl (\b a -> dataGen a >>= const b) (dataGen 0.0) as
+
+  dataGen :: forall a. a -> Data.FreeT Identity Identity a
+  dataGen = pure
 
 main = runSuite [ leftBindLargeBenchmark
                 , rightBindLargeBenchmark
