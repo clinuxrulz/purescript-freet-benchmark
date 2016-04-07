@@ -11,6 +11,7 @@ import Data.Monoid.Additive
 import Data.Monoid.Multiplicative
 import Data.Identity
 import Control.Monad.Eff
+import Control.Monad.Trans (lift)
 import Test.QuickCheck.Arbitrary (arbitrary)
 import Test.QuickCheck.Gen (vectorOf)
 import Benchotron.Core
@@ -37,19 +38,19 @@ leftBindLargeBenchmark = mkBenchmark
   origBinds as = foldl (\b a -> b >>= const (origGen a)) (origGen 0.0) as
 
   origGen :: forall a. a -> Orig.FreeT Identity Identity a
-  origGen = pure
+  origGen = lift <<< pure
 
   codBinds :: Array Number -> Cod.FreeT Identity Identity Number
   codBinds as = foldl (\b a -> b >>= const (codGen a)) (codGen 0.0) as
 
   codGen :: forall a. a -> Cod.FreeT Identity Identity a
-  codGen = pure
+  codGen = lift <<< pure
 
   dataBinds :: Array Number -> Data.FreeT Identity Identity Number
   dataBinds as = foldl (\b a -> b >>= const (dataGen a)) (dataGen 0.0) as
 
   dataGen :: forall a. a -> Data.FreeT Identity Identity a
-  dataGen = pure
+  dataGen = lift <<< pure
 
 rightBindLargeBenchmark :: Benchmark
 rightBindLargeBenchmark = mkBenchmark
@@ -72,19 +73,19 @@ rightBindLargeBenchmark = mkBenchmark
   origBinds as = foldl (\b a -> origGen a >>= const b) (origGen 0.0) as
 
   origGen :: forall a. a -> Orig.FreeT Identity Identity a
-  origGen = pure
+  origGen = lift <<< pure
 
   codBinds :: Array Number -> Cod.FreeT Identity Identity Number
   codBinds as = foldl (\b a -> codGen a >>= const b) (codGen 0.0) as
 
   codGen :: forall a. a -> Cod.FreeT Identity Identity a
-  codGen = pure
+  codGen = lift <<< pure
 
   dataBinds :: Array Number -> Data.FreeT Identity Identity Number
   dataBinds as = foldl (\b a -> dataGen a >>= const b) (dataGen 0.0) as
 
   dataGen :: forall a. a -> Data.FreeT Identity Identity a
-  dataGen = pure
+  dataGen = lift <<< pure
 
 main = runSuite [ leftBindLargeBenchmark
                 , rightBindLargeBenchmark
