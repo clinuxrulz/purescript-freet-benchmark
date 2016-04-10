@@ -51,7 +51,7 @@ bind_ m'@(FreeT m) f = m {
   liftM: (\m2 -> bind__ m' f),
   liftF: (\f2 -> bind__ m' f),
   suspend: (\thunk -> bind__ m' f),
-  bind: (\m2 f2 -> bind__ m' f)
+  bind: (\m2 f2 -> bind__ m2 (\x -> bind__ (suspend_ (\_ -> f2 x)) f))
 }
 
 instance functorFreeT :: Functor (FreeT f m) where

@@ -51,7 +51,7 @@ bind_ m'@(FreeT m) f = m $
     (\m2 -> bind__ m' f)
     (\f2 -> bind__ m' f)
     (\thunk -> bind__ m' f)
-    (\m2 f2 -> bind__ m' f)
+    (\m2 f2 -> bind__ m2 (\x -> bind__ (suspend_ (\_ -> f2 x)) f))
 
 instance functorFreeT :: Functor (FreeT f m) where
   map f ma = bind_ ma (done_ <<< f)
