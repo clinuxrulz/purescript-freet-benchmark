@@ -3,6 +3,7 @@ module Main where
 import Main.OriginalFreeTe0a15ee as Orig
 import Main.CodensityBasedFreeT as Cod
 import Main.DataFreeT as Data
+import Main.FreeT2 as V2
 
 import Prelude
 import Data.Array
@@ -26,8 +27,9 @@ leftBindLargeBenchmark = mkBenchmark
   , inputsPerSize: inputsPerSize
   , gen: \n -> vectorOf n (pure 0.0)
   , functions: [ benchFn "Original FreeT" (runIdentity <<< (Orig.runFreeT id) <<< origBinds)
-               , benchFn "Rec CPS FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
-               , benchFn "Data CPS FreeT" (runIdentity <<< (Data.runFreeT id) <<< dataBinds)
+               --, benchFn "Rec CPS FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
+               --, benchFn "Data CPS FreeT" (runIdentity <<< (Data.runFreeT id) <<< dataBinds)
+               , benchFn "FreeT2" (runIdentity <<< (V2.runFreeT id) <<< v2Binds)
                ]
   }
   where
@@ -52,6 +54,12 @@ leftBindLargeBenchmark = mkBenchmark
   dataGen :: forall a. a -> Data.FreeT Identity Identity a
   dataGen = lift <<< pure
 
+  v2Binds :: Array Number -> V2.FreeT Identity Identity Number
+  v2Binds as = foldl (\b a -> b >>= const (v2Gen a)) (v2Gen 0.0) as
+
+  v2Gen :: forall a. a -> V2.FreeT Identity Identity a
+  v2Gen = lift <<< pure
+
 rightBindLargeBenchmark :: Benchmark
 rightBindLargeBenchmark = mkBenchmark
   { slug: "right-bind-large"
@@ -61,8 +69,9 @@ rightBindLargeBenchmark = mkBenchmark
   , inputsPerSize: inputsPerSize
   , gen: \n -> vectorOf n (pure 0.0)
   , functions: [ benchFn "Original FreeT" (runIdentity <<< (Orig.runFreeT id) <<< origBinds)
-               , benchFn "Rec CPS FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
-               , benchFn "Data CPS FreeT" (runIdentity <<< (Data.runFreeT id) <<< dataBinds)
+               --, benchFn "Rec CPS FreeT" (runIdentity <<< (Cod.runFreeT id) <<< codBinds)
+               --, benchFn "Data CPS FreeT" (runIdentity <<< (Data.runFreeT id) <<< dataBinds)
+               , benchFn "FreeT2" (runIdentity <<< (V2.runFreeT id) <<< v2Binds)
                ]
   }
   where
@@ -86,6 +95,12 @@ rightBindLargeBenchmark = mkBenchmark
 
   dataGen :: forall a. a -> Data.FreeT Identity Identity a
   dataGen = lift <<< pure
+
+  v2Binds :: Array Number -> V2.FreeT Identity Identity Number
+  v2Binds as = foldl (\b a -> v2Gen a >>= const b) (v2Gen 0.0) as
+
+  v2Gen :: forall a. a -> V2.FreeT Identity Identity a
+  v2Gen = lift <<< pure
 
 main = runSuite [ leftBindLargeBenchmark
                 , rightBindLargeBenchmark
