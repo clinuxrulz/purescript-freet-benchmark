@@ -1,4 +1,13 @@
-module Main.FreeT2 where
+module Main.FreeT2
+  ( FreeT()
+  , freeT
+  , liftFreeT
+  , hoistFreeT
+  , interpret
+  , bimapFreeT
+  , resume
+  , runFreeT
+  ) where
 
 import Prelude
 import Control.Bind ((<=<))
@@ -88,6 +97,22 @@ instance monadRecFreeT :: (Functor f, Monad m) => MonadRec (FreeT f m) where
 -- | Lift an action from the functor `f` to a `FreeT` action.
 liftFreeT :: forall f m a. (Functor f, Monad m) => f a -> FreeT f m a
 liftFreeT = LiftF
+
+-- | Change the underlying `Monad` for a `FreeT` action.
+hoistFreeT :: forall f m n a. (Functor f, Functor n) => (forall b. m b -> n b) -> FreeT f m a -> FreeT f n a
+hoistFreeT = bimapFreeT id
+
+-- | Change the base functor `f` for a `FreeT` action.
+interpret :: forall f g m a. (Functor f, Functor m) => (forall b. f b -> g b) -> FreeT f m a -> FreeT g m a
+interpret nf = bimapFreeT nf id
+
+-- | Change the base functor `f` and the underlying `Monad` for a `FreeT` action.
+bimapFreeT :: forall f g m n a. (Functor f, Functor n) => (forall b. f b -> g b) -> (forall b. m b -> n b) -> FreeT f m a -> FreeT g n a
+bimapFreeT _ _ (Done a) = Done a
+bimapFreeT _ nm (LiftM m) = LiftM $ nm m
+bimapFreeT nf _ (LiftF f) = LiftF $ nf f
+bimapFreeT nf nm (Suspend thunk) = bimapFreeT nf nm (thunk unit)
+bimapFreeT nf nm (Bind e) = runExists (\(Bound a f) -> bound (bimapFreeT nf nm a) (bimapFreeT nf nm <<< f)) e
 
 -- | Run a `FreeT` computation to completion.
 runFreeT :: forall f m a. (Functor f, MonadRec m) => (f (FreeT f m a) -> m (FreeT f m a)) -> FreeT f m a -> m a
