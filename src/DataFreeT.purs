@@ -106,6 +106,7 @@ resumeStep =
         (\m3 f2 -> pure $ Left $ (bind_ m3 (\a -> bind_ (f2 a) f)))
     )
 
+-- | Unpack `FreeT`, exposing the first step of the computation.
 resume :: forall f m a. (Functor f, MonadRec m) => FreeT f m a -> m (Either a (f (FreeT f m a)))
 resume = tailRecM (go resumeStep)
   where

@@ -113,6 +113,7 @@ resumeStep = {
   })
 }
 
+-- | Unpack `FreeT`, exposing the first step of the computation.
 resume :: forall f m a. (Functor f, MonadRec m) => FreeT f m a -> m (Either a (f (FreeT f m a)))
 resume = tailRecM (go resumeStep)
   where
